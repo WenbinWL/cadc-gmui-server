@@ -120,7 +120,28 @@ public class GroupMemberListResource extends AbstractResource {
                     }
                 });
 
-                tableWriter.write(doc, writer);
+                java.io.OutputStream outputStream = new java.io.OutputStream() {
+                    @Override
+                    public void write(int b) throws java.io.IOException {
+                        writer.write(b);
+                    }
+                    
+                    @Override
+                    public void write(byte[] b, int off, int len) throws java.io.IOException {
+                        writer.write(new String(b, off, len, java.nio.charset.StandardCharsets.UTF_8));
+                    }
+                    
+                    @Override
+                    public void flush() throws java.io.IOException {
+                        writer.flush();
+                    }
+                    
+                    @Override
+                    public void close() throws java.io.IOException {
+                        writer.close();
+                    }
+                };
+                tableWriter.write(doc, outputStream);
             }
         };
     }
