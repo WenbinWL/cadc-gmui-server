@@ -1,0 +1,27 @@
+name: Java CI (library + gmui)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-library:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: cadc-gmui-server } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '11', cache: gradle }
+      - uses: gradle/actions/setup-gradle@v3
+      - run: ./gradlew -i clean build javadoc
+
+  build-gmui:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: gmui } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17', cache: gradle }
+      - uses: gradle/actions/setup-gradle@v3
+      - run: ./gradlew -x test clean war
+      - run: docker build -t gmui:local .
