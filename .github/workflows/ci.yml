@@ -13,11 +13,11 @@ jobs:
         with: { distribution: temurin, java-version: '11', cache: gradle }
       - uses: gradle/actions/setup-gradle@v3
       
-      - name: Build library
+      - name: Build library (with tests and javadoc)
         working-directory: cadc-gmui-server
         run: ../gradlew -i clean build javadoc
         
-      - name: Build gmui
+      - name: Build gmui application
         working-directory: gmui  
         run: ../gradlew clean build
         
