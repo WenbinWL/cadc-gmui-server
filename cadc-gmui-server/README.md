@@ -1,2 +1,0 @@
-# gmui
-Group Management UI
